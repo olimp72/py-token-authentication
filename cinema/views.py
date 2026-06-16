@@ -69,11 +69,9 @@ class MovieViewSet(
 
     @staticmethod
     def _params_to_ints(qs):
-        """Converts a list of string IDs to a list of integers"""
         return [int(str_id) for str_id in qs.split(",")]
 
     def get_queryset(self):
-        """Retrieve the movies with filters"""
         title = self.request.query_params.get("title")
         genres = self.request.query_params.get("genres")
         actors = self.request.query_params.get("actors")
@@ -103,8 +101,6 @@ class MovieViewSet(
         return MovieSerializer
 
 
-# Для MovieSession потрібні абсолютно всі стандартні дії (CRUD),
-# тому тут залишаємо ModelViewSet
 class MovieSessionViewSet(viewsets.ModelViewSet):
     queryset = (
         MovieSession.objects.all()
@@ -160,10 +156,9 @@ class OrderViewSet(
     serializer_class = OrderSerializer
     pagination_class = OrderPagination
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)  # Тільки авторизовані користувачі
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        # Використовуємо self.queryset, щоб зберігся prefetch_related
         return self.queryset.filter(user=self.request.user)
 
     def get_serializer_class(self):
